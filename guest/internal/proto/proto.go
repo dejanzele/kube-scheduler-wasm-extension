@@ -54,6 +54,20 @@ func GetResourceVersion[O object](o O) string {
 	return ""
 }
 
+func GetLabels[O object](o O) map[string]string {
+	if md := o.GetMetadata(); md != nil {
+		return md.Labels
+	}
+	return nil
+}
+
+func GetAnnotations[O object](o O) map[string]string {
+	if md := o.GetMetadata(); md != nil {
+		return md.Annotations
+	}
+	return nil
+}
+
 var _ proto.Node = (*Node)(nil)
 
 type Node struct {
@@ -82,6 +96,14 @@ func (o *Node) GetKind() string {
 
 func (o *Node) GetApiVersion() string {
 	return "v1"
+}
+
+func (o *Node) GetLabels() map[string]string {
+	return GetLabels(o.Msg)
+}
+
+func (o *Node) GetAnnotations() map[string]string {
+	return GetAnnotations(o.Msg)
 }
 
 func (o *Node) Spec() *protoapi.NodeSpec {
@@ -120,6 +142,14 @@ func (o *Pod) GetKind() string {
 
 func (o *Pod) GetApiVersion() string {
 	return "v1"
+}
+
+func (o *Pod) GetLabels() map[string]string {
+	return GetLabels(o.Msg)
+}
+
+func (o *Pod) GetAnnotations() map[string]string {
+	return GetAnnotations(o.Msg)
 }
 
 func (o *Pod) Spec() *protoapi.PodSpec {
